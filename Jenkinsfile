@@ -29,14 +29,5 @@ pipeline {
                 bat 'dotnet publish %solutionName% -c Release -o Publish'
             }
         }
-		stage('Deploy') {
-            
-            steps{
-                echo 'Deploy stage'
-                bat 'docker build -t api -f dockerfile .'
-				bat 'docker run api -p 1112:1112/tcp demoapi:latest'
-            }
-        }
-
     }
 }
