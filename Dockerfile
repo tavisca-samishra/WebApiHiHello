@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.1 AS runtime
-WORKDIR /app
-COPY ./WebApiHiHello/publish ./
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
+WORKDIR app
+COPY WebApiHiHello/Publish .
+EXPOSE 1112
 ENTRYPOINT ["dotnet", "WebApiHiHello.dll"]
