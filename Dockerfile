@@ -1,20 +1,5 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM microsoft/dotnet:2.1-sdk AS build
-WORKDIR /src
-COPY WebApiHiHello/WebApiHiHello.csproj WebApiHiHello/
-RUN dotnet restore WebApiHiHello/WebApiHiHello.csproj
-COPY . .
-WORKDIR /src/WebApiHiHello
-RUN dotnet build WebApiHiHello.csproj -c Release -o /app
-
-FROM build AS publish
-RUN dotnet publish WebApiHiHello.csproj -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app .
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
+WORKDIR app
+COPY WebApiHiHello/Publish .
+EXPOSE 1112
 ENTRYPOINT ["dotnet", "WebApiHiHello.dll"]
