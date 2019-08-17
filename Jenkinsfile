@@ -3,6 +3,7 @@ pipeline {
     
     parameters {
         string(defaultValue: "WebApiHiHello.sln", description: 'name of solution file', name: 'solutionName')
+		string(defaultValue: "api", description: 'name of docker image', name: 'dockerImage')
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
     }
     
@@ -29,5 +30,14 @@ pipeline {
                 bat 'dotnet publish %solutionName% -c Release -o Publish'
             }
         }
+		stage('Deploy') {
+            
+            steps{
+                echo 'Deploy stage'
+                bat 'docker build -t %dockerImage% -f dockerfile .'
+				bat 'docker run --rm -p 1112:1112 %dockerImage% '
+            }
+        }
+
     }
 }
