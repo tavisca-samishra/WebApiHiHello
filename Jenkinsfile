@@ -37,6 +37,14 @@ pipeline {
 				bat 'docker build --tag=%dockerImage% --file=Dockerfile .'
 			}
 		}
+		stage('SonarQube') {
+        	
+        	steps{
+				bat 'dotnet C:/Users/smishra/.dotnet/tools/.store/dotnet-sonarscanner/4.3.1/dotnet-sonarscanner/4.3.1/tools/netcoreapp2.1/any/SonarScanner.MSBuild.dll begin /d:sonar.login=admin /d:sonar.password=admin /k:"admin"'
+				bat 'dotnet build'
+				bat 'dotnet C:/Users/smishra/.dotnet/tools/.store/dotnet-sonarscanner/4.3.1/dotnet-sonarscanner/4.3.1/tools/netcoreapp2.1/any/SonarScanner.MSBuild.dll end /d:sonar.login=admin /d:sonar.password=admin'
+        	}
+        }
 		stage('Docker Login'){
             steps{
                 withCredentials([usernamePassword(credentialsId: 'f159b697-37a1-4e3f-acc2-3d83b16261b4	', passwordVariable: 'password', usernameVariable: 'username')]){
