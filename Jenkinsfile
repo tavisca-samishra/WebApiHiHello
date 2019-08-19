@@ -59,4 +59,4 @@ pipeline {
 				bat 'docker run -p 1112:1112 --rm %dockerImage%'
 			}
 		}
-    }
+    }}}
