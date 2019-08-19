@@ -7,6 +7,9 @@ pipeline {
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
 		string(defaultValue:"samishra/basic-api", description: 'Repository Name', name: 'repositoryName')
 		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')
+		string(defaultValue:"C:/sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll", description: 'Path for Sonar Scanner', name: 'sonarPath')
+		string(defaultValue:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49", description: 'Token id', name: 'keyToken')
+
     }
     
     stages { 
@@ -40,9 +43,9 @@ pipeline {
 		stage('SonarQube') {
         	
         	steps{
-				bat 'dotnet C:/sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll begin /d:sonar.login=admin /d:sonar.password=admin /k:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49"'
+				bat 'dotnet %sonarPath% begin /d:sonar.login=admin /d:sonar.password=admin /k:"%23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49%"'
 				bat 'dotnet build'
-				bat 'dotnet C:/sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll end /d:sonar.login=admin /d:sonar.password=admin'
+				bat 'dotnet %sonarPath% end /d:sonar.login=admin /d:sonar.password=admin'
         	}
         }
 		stage('Docker Login'){
