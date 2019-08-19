@@ -43,6 +43,7 @@ pipeline {
                     bat 'docker login --username=%username% --password=%password%'
                 }
             }
+			}
 		stage('Docker Push'){
 			steps{
 				bat 'docker tag %dockerImage% %repositoryName%:%tag%'
@@ -59,4 +60,4 @@ pipeline {
 				bat 'docker run -p 1112:1112 --rm %dockerImage%'
 			}
 		}
-    }}}
+    }}
