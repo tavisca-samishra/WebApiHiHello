@@ -10,7 +10,6 @@ pipeline {
 		string(defaultValue:"1112", description: 'port assigned for container', name: 'dockerPort')
 		string(defaultValue:"1112", description: 'mapped local port', name: 'localPort')
 		string(defaultValue:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49", description: 'Token id', name: 'keyToken')
-		string(defaultValue:"f159b697-37a1-4e3f-acc2-3d83b16261b4", description: 'credentialId', name: 'credentialId')
     }
     
     stages { 
@@ -51,7 +50,7 @@ pipeline {
 		}
 		stage('Docker Login'){
             steps{
-                withCredentials([usernamePassword(credentialsId: '%credentialId%', passwordVariable: 'password', usernameVariable: 'username')]){
+                withCredentials([usernamePassword(credentialsId: 'f159b697-37a1-4e3f-acc2-3d83b16261b4', passwordVariable: 'password', usernameVariable: 'username')]){
                     bat 'docker login --username=%username% --password=%password%'
                 }
             }
