@@ -57,7 +57,7 @@ pipeline {
 		}
 		stage('Docker Deploy'){
 			steps{
-				bat 'docker run -p 8111:11104 --rm %dockerImage%'
+				bat 'docker run -p 1112:1112 --rm %dockerImage%'
 			}
 		}
     }
