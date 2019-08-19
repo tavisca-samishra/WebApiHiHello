@@ -34,14 +34,6 @@ pipeline {
                 bat 'dotnet publish %solutionName% -c Release -o Publish'
             }
         }
-		stage('Deploy') {
-            
-            steps{
-                echo 'Deploy stage'
-                bat 'docker build --tag=%dockerImage% .'
-				bat 'docker run --rm -p 1112:1112 %dockerImage% '
-            }
-        }
 		stage('Docker Build'){
 			steps{
 				bat 'docker build --tag=%dockerImage% --file=Dockerfile .'
