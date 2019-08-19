@@ -40,9 +40,9 @@ pipeline {
 		stage('SonarQube') {
         	
         	steps{
-				bat 'dotnet C:/Users/smishra/.dotnet/tools/.store/dotnet-sonarscanner/4.3.1/dotnet-sonarscanner/4.3.1/tools/netcoreapp2.1/any/SonarScanner.MSBuild.dll begin /d:sonar.login=admin /d:sonar.password=admin /k:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49"'
+				bat 'dotnet C:\sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll begin /d:sonar.login=admin /d:sonar.password=admin /k:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49"'
 				bat 'dotnet build'
-				bat 'dotnet C:/Users/smishra/.dotnet/tools/.store/dotnet-sonarscanner/4.3.1/dotnet-sonarscanner/4.3.1/tools/netcoreapp2.1/any/SonarScanner.MSBuild.dll end /d:sonar.login=admin /d:sonar.password=admin'
+				bat 'dotnet C:\sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll end /d:sonar.login=admin /d:sonar.password=admin'
         	}
         }
 		stage('Docker Login'){
