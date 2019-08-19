@@ -7,9 +7,12 @@ pipeline {
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
 		string(defaultValue:"samishra/basic-api", description: 'Repository Name', name: 'repositoryName')
 		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')
-		string(defaultValue:"C:/sonar-scanner-msbuild-4.6.2.2108-netcoreapp2.0/SonarScanner.MSBuild.dll", description: 'Path for Sonar Scanner', name: 'sonarPath')
+		string(defaultValue:"admin", description: 'username in sonarqube', name: 'sonarID')	
+		string(defaultValue:"admin", description: 'password in sonarqube', name: 'sonarPassword')		
+		string(defaultValue:"1112", description: 'port assigned for container', name: 'dockerPort')
+		string(defaultValue:"1112", description: 'mapped local port', name: 'localPort')
 		string(defaultValue:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49", description: 'Token id', name: 'keyToken')
-
+		string(defaultValue:"f159b697-37a1-4e3f-acc2-3d83b16261b4", description: 'credentialId', name: 'credentialId')
     }
     
     stages { 
@@ -43,14 +46,14 @@ pipeline {
 		stage('SonarQube') {
         	
         	steps{
-				bat 'dotnet %sonarPath% begin /d:sonar.login=admin /d:sonar.password=admin /k:"%23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49%"'
+				bat 'dotnet %sonarPath% begin /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword% /k:"%23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49%"'
 				bat 'dotnet build'
-				bat 'dotnet %sonarPath% end /d:sonar.login=admin /d:sonar.password=admin'
+				bat 'dotnet %sonarPath% end /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword%'
         	}
         }
 		stage('Docker Login'){
             steps{
-                withCredentials([usernamePassword(credentialsId: 'f159b697-37a1-4e3f-acc2-3d83b16261b4	', passwordVariable: 'password', usernameVariable: 'username')]){
+                withCredentials([usernamePassword(credentialsId: '%credentialId%', passwordVariable: 'password', usernameVariable: 'username')]){
                     bat 'docker login --username=%username% --password=%password%'
                 }
             }
@@ -68,7 +71,7 @@ pipeline {
 		}
 		stage('Docker Deploy'){
 			steps{
-				bat 'docker run -p 1112:1112 --rm %dockerImage%'
+				bat 'docker run -p %dockerPort%:%localPort% --rm %dockerImage%'
 			}
 		}
     }}
