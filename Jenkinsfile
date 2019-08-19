@@ -5,8 +5,6 @@ pipeline {
         string(defaultValue: "WebApiHiHello.sln", description: 'name of solution file', name: 'solutionName')
 		string(defaultValue: "api", description: 'name of docker image', name: 'dockerImage')
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
-		string(defaultValue:"samishra", description: 'Docker Hub Username', name: 'username')
-		string(defaultValue:"password", description: 'Docker Hub Password', name: 'password')
 		string(defaultValue:"samishra/basic-api", description: 'Repository Name', name: 'repositoryName')
 		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')
     }
@@ -40,10 +38,11 @@ pipeline {
 			}
 		}
 		stage('Docker Login'){
-			steps{
-				bat 'docker login --username=%username% --password=%password%'
-			}
-		}
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'f159b697-37a1-4e3f-acc2-3d83b16261b4	', passwordVariable: 'password', usernameVariable: 'username')]){
+                    bat 'docker login --username=%username% --password=%password%'
+                }
+            }
 		stage('Docker Push'){
 			steps{
 				bat 'docker tag %dockerImage% %repositoryName%:%tag%'
