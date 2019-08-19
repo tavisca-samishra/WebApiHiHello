@@ -6,9 +6,7 @@ pipeline {
 		string(defaultValue: "api", description: 'name of docker image', name: 'dockerImage')
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
 		string(defaultValue:"samishra/basic-api", description: 'Repository Name', name: 'repositoryName')
-		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')
-		string(defaultValue:"admin", description: 'username in sonarqube', name: 'sonarID')	
-		string(defaultValue:"admin", description: 'password in sonarqube', name: 'sonarPassword')		
+		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')	
 		string(defaultValue:"1112", description: 'port assigned for container', name: 'dockerPort')
 		string(defaultValue:"1112", description: 'mapped local port', name: 'localPort')
 		string(defaultValue:"23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49", description: 'Token id', name: 'keyToken')
@@ -38,12 +36,7 @@ pipeline {
                 bat 'dotnet publish %solutionName% -c Release -o Publish'
             }
         }
-		stage('Docker Build'){
-			steps{
-				bat 'docker build --tag=%dockerImage% --file=Dockerfile .'
-			}
-		}
-		stage('SonarQube') {
+		stage('SonarQube Analysis') {
         	
         	steps{
 				bat 'dotnet %sonarPath% begin /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword% /k:"%23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49%"'
@@ -51,6 +44,11 @@ pipeline {
 				bat 'dotnet %sonarPath% end /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword%'
         	}
         }
+		stage('Docker Build'){
+			steps{
+				bat 'docker build --tag=%dockerImage% --file=Dockerfile .'
+			}
+		}
 		stage('Docker Login'){
             steps{
                 withCredentials([usernamePassword(credentialsId: '%credentialId%', passwordVariable: 'password', usernameVariable: 'username')]){
