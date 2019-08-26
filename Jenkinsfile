@@ -49,7 +49,7 @@ pipeline {
         }}
 		stage('Docker Build'){
 			steps{
-				bat 'docker build --build-arg publish_path=%publishPath% --build-arg dll_file=%dllFile% --tag=%dockerImage% --file=Dockerfile .'
+				bat 'docker build --build-arg publish_path=%publishPath% --tag=%dockerImage% --file=Dockerfile .'
 			}
 		}
 		stage('Docker Login'){
@@ -72,7 +72,7 @@ pipeline {
 		}
 		stage('Docker Deploy'){
 			steps{
-				bat 'docker run -p %dockerPort%:%localPort% %dockerImage%'
+				bat 'docker run -p %dockerPort%:%localPort% -e SOLUTION_DLL=%dllFile% %dockerImage%'
 			}
 		}
     }}
