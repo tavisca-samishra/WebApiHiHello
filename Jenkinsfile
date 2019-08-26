@@ -5,7 +5,8 @@ pipeline {
         string(defaultValue: "WebApiHiHello.sln", description: 'name of solution file', name: 'solutionName')
 		string(defaultValue: "api", description: 'name of docker image', name: 'dockerImage')
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
-		string(defaultValue:"samishra/basic-api", description: 'Repository Name', name: 'repositoryName')
+		string(defaultValue: "samishra", description: 'name of registry', name: 'registryName')
+		string(defaultValue:"basic-api", description: 'Repository Name', name: 'repositoryName')
 		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')	
 		string(defaultValue:"1112", description: 'port assigned for container', name: 'dockerPort')
 		string(defaultValue:"1112", description: 'mapped local port', name: 'localPort')
@@ -38,7 +39,7 @@ pipeline {
 		stage('SonarQube Analysis') {
         	
         	steps{
-				bat 'dotnet %sonarPath% begin /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword% /k:"%23f6d9c3a43e1c5317d1d80777cfa0e6027f5a49%"'
+				bat 'dotnet %sonarPath% begin /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword% /k:"%keyToken%"'
 				bat 'dotnet build'
 				bat 'dotnet %sonarPath% end /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword%'
         	}
@@ -57,7 +58,7 @@ pipeline {
 			}
 		stage('Docker Push'){
 			steps{
-				bat 'docker tag %dockerImage% %repositoryName%:%tag%'
+				bat 'docker tag %dockerImage% %registryName%/%repositoryName%:%tag%'
 				bat 'docker push %repositoryName%:%tag%'
 			}
 		}
@@ -68,7 +69,7 @@ pipeline {
 		}
 		stage('Docker Deploy'){
 			steps{
-				bat 'docker run -p %dockerPort%:%localPort% --rm %dockerImage%'
+				bat 'docker run -p %dockerPort%:%localPort% %dockerImage%'
 			}
 		}
     }}
