@@ -59,12 +59,12 @@ pipeline {
 		stage('Docker Push'){
 			steps{
 				bat 'docker tag %dockerImage% %registryName%/%repositoryName%:%tag%'
-				bat 'docker push %repositoryName%:%tag%'
+				bat 'docker push %registryName%/%repositoryName%:%tag%'
 			}
 		}
 		stage('Docker Pull'){
 			steps{
-				bat 'docker pull %repositoryName%:%tag%'
+				bat 'docker pull %registryName%/%repositoryName%:%tag%'
 			}
 		}
 		stage('Docker Deploy'){
