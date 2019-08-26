@@ -39,11 +39,12 @@ pipeline {
 		stage('SonarQube Analysis') {
         	
         	steps{
-				bat 'dotnet %sonarPath% begin /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword% /k:"%keyToken%"'
+				withCredentials([usernamePassword(credentialsId: '1df07212-97bf-4d08-85c6-706f69dc5e45	', passwordVariable: 'password', usernameVariable: 'username')]){
+				bat 'dotnet %sonarPath% begin /d:sonar.login=%username% /d:sonar.password=%password% /k:"%keyToken%"'
 				bat 'dotnet build'
-				bat 'dotnet %sonarPath% end /d:sonar.login=%sonarID% /d:sonar.password=%sonarPassword%'
+				bat 'dotnet %sonarPath% end /d:sonar.login=%username% /d:sonar.password=%password%'
         	}
-        }
+        }}
 		stage('Docker Build'){
 			steps{
 				bat 'docker build --tag=%dockerImage% --file=Dockerfile .'
