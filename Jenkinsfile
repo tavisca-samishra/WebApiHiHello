@@ -5,6 +5,8 @@ pipeline {
         string(defaultValue: "WebApiHiHello.sln", description: 'name of solution file', name: 'solutionName')
 		string(defaultValue: "api", description: 'name of docker image', name: 'dockerImage')
 		string(defaultValue: "ApiCrudTest.Tests/ApiCrudTest.Tests.csproj", description: 'name of test file', name: 'testName')
+		string(defaultValue: "WebApiHiHello/Publish", description: 'path of publish', name: 'publishPath')
+		string(defaultValue: "WebApiHiHello.dll", description: 'dll filename', name: 'dllFile')
 		string(defaultValue: "samishra", description: 'name of registry', name: 'registryName')
 		string(defaultValue:"basic-api", description: 'Repository Name', name: 'repositoryName')
 		string(defaultValue:"v1.0", description: 'Docker image Tag', name: 'tag')	
@@ -47,7 +49,7 @@ pipeline {
         }}
 		stage('Docker Build'){
 			steps{
-				bat 'docker build --tag=%dockerImage% --file=Dockerfile .'
+				bat 'docker build --build-arg publish_path=%publishPath% --build-arg dll_file=%dllFile% --tag=%dockerImage% --file=Dockerfile .'
 			}
 		}
 		stage('Docker Login'){
