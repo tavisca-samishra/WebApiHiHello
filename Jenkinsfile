@@ -75,4 +75,9 @@ pipeline {
 				bat 'docker run -p %dockerPort%:%localPort% -e SOLUTION_DLL=%dllFile% %dockerImage%'
 			}
 		}
+		stage('Docker stop'){
+			steps{
+				Container.stop
+			}
+		}
     }}
