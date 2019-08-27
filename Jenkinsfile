@@ -63,7 +63,6 @@ pipeline {
 			steps{
 				bat 'docker tag %dockerImage% %registryName%/%repositoryName%:%tag%'
 				bat 'docker push %registryName%/%repositoryName%:%tag%'
-				bat 'docker rmi %dockerImage%'
 			}
 		}
 		stage('Docker Pull'){
