@@ -17,6 +17,11 @@ pipeline {
     
     stages { 
 
+	stage('Docker stop'){
+			steps{
+				sh '$Container.stop'
+			}
+		}
         stage('Build') {
             
             steps{
@@ -75,9 +80,5 @@ pipeline {
 				bat 'docker run -p %dockerPort%:%localPort% -e SOLUTION_DLL=%dllFile% %dockerImage%'
 			}
 		}
-		stage('Docker stop'){
-			steps{
-				sh 'Container.stop'
-			}
-		}
+		
     }}
