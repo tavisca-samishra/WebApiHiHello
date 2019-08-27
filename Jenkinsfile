@@ -77,7 +77,7 @@ pipeline {
 		}
 		stage('Docker stop'){
 			steps{
-				Container.stop
+				sh 'Container.stop'
 			}
 		}
     }}
